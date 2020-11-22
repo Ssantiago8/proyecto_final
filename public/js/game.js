@@ -29,19 +29,14 @@ function preload() {
 
   //Carga de vehiculos
   this.load.image('carro', 'assets/cars/Audi.png');
-  this.load.image('one', 'assets/cars/Ambulance.png');
-  this.load.image('two', 'assets/cars/Black_viper.png');
-  this.load.image('three', 'assets/cars/Car.png');
-  this.load.image('four', 'assets/cars/Mini_truck.png');
-  this.load.image('five', 'assets/cars/Mini_van.png');
-  this.load.image('six', 'assets/cars/Police.png');
+  this.load.image('policia', 'assets/cars/Police.png');
   
 
  
   //Carga del mapa
   
 
-  this.load.image('fondo','assets/mapa/fondo.jpg');
+  this.load.image('fondoHielo','assets/mapa/fondoHielo.png');
   
   
 }
@@ -50,8 +45,8 @@ function create() {
 
 
   //Creacion del mapa
-  this.add.image(400, 300, 'fondo');
-  
+  this.add.image(400, 300, 'fondoHielo');
+
   //Declaracion de socket y otros jugadores
   var self = this;
   this.socket = io();
@@ -106,19 +101,6 @@ function create() {
   this.cursors = this.input.keyboard.createCursorKeys();
 
 
-  //Actualizar los marcadores
-    this.maxScoreText = this.add.text(700,480, 'Mayor vueltas: 0', { fontSize: '24px', fill: '#000' ,fontFamily:'Impact'});
-
-    this.socket.on('scoreUpdate', function (scores) {
-      self.maxScoreText.setText('Mayor vueltas: ' + scores.max)
-      
-     });
-
-
-//  Creacion de Marcador personal
-  scoreText = this.add.text(700,420, 'Vueltas: 0', { fontSize: '32px', fill: '#000' ,fontFamily:'Impact'});
-
- 
 //Colisiones entre jugador y mapa
  
   this.socket.on('checkpoint_location', function(checkpoint_location){
@@ -128,7 +110,7 @@ function create() {
  
 
   //Declarar un ganador y reinicio de juego
-  this.socket.on('soy ganador', data=>{
+  /*this.socket.on('soy ganador', data=>{
     alert('El ganador fue el jugador '+data)
     score=0;
     scoreText.setText('Vueltas: ' + 0);
@@ -149,7 +131,7 @@ function create() {
     score = 0;
     console.log("otro gana")
   })
-
+*/
   
 
 }
@@ -168,63 +150,13 @@ function addPlayer(self, playerInfo) {
 
 //Creacion de los autos de los demas jugadores en el servidor
 function addOtherPlayers(self, playerInfo) {
-  var number = Math.floor(Math.random() * 9); 
-  console.log(number);
+  
   var otherPlayer;
-  switch (number){
-    case 1:
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'one').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
+  
+      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'policia').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
       otherPlayer.playerId = playerInfo.playerId;
       self.otherPlayers.add(otherPlayer);
-    break;
-    
-    case 2:
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'two').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-      otherPlayer.playerId = playerInfo.playerId;
-      self.otherPlayers.add(otherPlayer);
-    break;
-    
-    case 3:
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'three').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-      otherPlayer.playerId = playerInfo.playerId;
-      self.otherPlayers.add(otherPlayer);
-    break;
-
-    case 4:
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'four').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-      otherPlayer.playerId = playerInfo.playerId;
-      self.otherPlayers.add(otherPlayer);
-    break;
-
-    case 5:
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'five').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-      otherPlayer.playerId = playerInfo.playerId;
-      self.otherPlayers.add(otherPlayer);
-    break;
-
-    case 6:
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'six').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-      otherPlayer.playerId = playerInfo.playerId;
-      self.otherPlayers.add(otherPlayer);
-    break;
-
-    case 7:
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'seven').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-      otherPlayer.playerId = playerInfo.playerId;
-      self.otherPlayers.add(otherPlayer);
-    break;
-    case 8:
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'nine').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-      otherPlayer.playerId = playerInfo.playerId;
-      self.otherPlayers.add(otherPlayer);
-    break;
-    
-    default:
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'one').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
-      otherPlayer.playerId = playerInfo.playerId;
-      self.otherPlayers.add(otherPlayer);
-    break;
-  }
+   
   
 }
 
