@@ -36,7 +36,7 @@ function preload() {
   this.load.image('five', 'assets/cars/Mini_van.png');
   this.load.image('six', 'assets/cars/Police.png');
   this.load.image('seven', 'assets/cars/taxi.png');
-  this.load.image('nine', 'assets/cars/truck.png');
+  
 
  
   //Carga del mapa
