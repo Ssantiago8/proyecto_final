@@ -40,7 +40,7 @@ function preload() {
  
   //Carga del mapa
   this.load.tilemapTiledJSON('mapa', 'assets/mapa/Mapa.json');
-  this.load.image('tiles','assets/mapa/tileSets.png');
+  this.load.image('tiles','assets/mapa/fondo.jpg');
 
   //Carga de los bordes del mapa
   
