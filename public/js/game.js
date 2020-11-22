@@ -129,7 +129,7 @@ function create() {
  
   this.socket.on('checkpoint_location', function(checkpoint_location){
     if(self.checkpoint) self.checkpoint.destroy();
-    self.checkpoint = self.physics.add.image(checkpoint_location.x, checkpoint_location.y, 'checkpoint');
+    self.checkpoint = self.physics;
   });
  
 
