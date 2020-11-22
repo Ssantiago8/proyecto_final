@@ -32,6 +32,7 @@ function preload() {
   this.load.image('one', 'assets/cars/Ambulance.png');
   this.load.image('two', 'assets/cars/Black_viper.png');
   this.load.image('three', 'assets/cars/Car.png');
+  this.load.image('four', 'assets/cars/Mini_truck.png');
   this.load.image('five', 'assets/cars/Mini_van.png');
   this.load.image('six', 'assets/cars/Police.png');
   
@@ -125,114 +126,12 @@ function create() {
 
  
 //Colisiones entre jugador y mapa
-  this.socket.on('starLocation', function (starLocation) {
-    if (self.star) self.star.destroy();
-    self.star = self.physics.add.image(starLocation.x, starLocation.y, 'star');
-    self.physics.add.collider(self.carro, self.star, function () {
-      self.carro.setVelocity(0);
-      self.star.setVelocity(0);
-    }, null, self);
-  });
-  this.socket.on('llegada_location', function(llegada_location){
-    if(self.llegada) self.llegada.destroy();
-    self.llegada = self.physics.add.image(llegada_location.x, llegada_location.y, 'llegada');
-    
-  });
+ 
   this.socket.on('checkpoint_location', function(checkpoint_location){
     if(self.checkpoint) self.checkpoint.destroy();
     self.checkpoint = self.physics.add.image(checkpoint_location.x, checkpoint_location.y, 'checkpoint');
   });
-    
-  this.socket.on('caja_derLocation', function(caja_derLocation){
-    if(self.cajaDer) self.cajaDer.destroy();
-    self.cajaDer = self.physics.add.image(caja_derLocation.x, caja_derLocation.y, 'cajaDer');
-    self.physics.add.collider(self.carro, self.cajaDer, function(){
-      self.carro.setVelocity(0);
-      self.cajaDer.setVelocity(0);
-    }, null, self);
-  });
-  this.socket.on('caja_intLocation', function(caja_intLocation){
-    if(self.cajaInt) self.cajaInt.destroy();
-    self.cajaInt = self.physics.add.image(caja_intLocation.x, caja_intLocation.y, 'cajaInt');
-    self.physics.add.collider(self.carro, self.cajaInt, function(){
-      self.carro.setVelocity(0);
-      self.cajaInt.setVelocity(0);
-    }, null, self);
-  });
-  this.socket.on('caja_intinfLocation', function(caja_intinfLocation){
-    if(self.cajaInt) //self.cajaIntInf.destroy();
-    self.cajaIntInf = self.physics.add.image(caja_intinfLocation.x, caja_intinfLocation.y, 'cajaIntInf');
-    self.physics.add.collider(self.carro, self.cajaIntInf, function(){
-      self.carro.setVelocity(0);
-      self.cajaIntInf.setVelocity(0);
-    }, null, self);
-  });
-  this.socket.on('div_medioLocation', function(div_medioLocation){
-    if(self.divMed) self.divMed.destroy();
-    self.divMed = self.physics.add.image(div_medioLocation.x, div_medioLocation.y, 'divMed');
-    self.physics.add.collider(self.carro, self.divMed, function(){
-      self.carro.setVelocity(0);
-      self.divMed.setVelocity(0);
-    }, null, self);
-  });
-  
-  this.socket.on('obstaculo_derLocation', function(obstaculo_derLocation){
-    if(self.obstDer) self.obstDer.destroy();
-    self.obstDer = self.physics.add.image(obstaculo_derLocation.x, obstaculo_derLocation.y, 'obstDer');
-    self.physics.add.collider(self.carro, self.obstDer, function(){
-      self.carro.setVelocity(0);
-      self.obstDer.setVelocity(0);
-    }, null, self);
-  });
-  this.socket.on('obstaculo_techoLocation', function(obstaculo_techoLocation){
-    if(self.obstTec) self.obstTec.destroy();
-    self.obstTec = self.physics.add.image(obstaculo_techoLocation.x, obstaculo_techoLocation.y, 'obstTec');
-    self.physics.add.collider(self.carro, self.obstTec, function(){
-      self.carro.setVelocity(0);
-      self.obstTec.setVelocity(0);
-    }, null, self);
-  });
-  this.socket.on('pared_der_supLocation', function(pared_der_supLocation){
-    if(self.parDersup) self.parDersup.destroy();
-    self.parDersup = self.physics.add.image(pared_der_supLocation.x, pared_der_supLocation.y, 'parDersup');
-    self.physics.add.collider(self.carro, self.parDersup, function(){
-      self.carro.setVelocity(0);
-      self.parDersup.setVelocity(0);
-    }, null, self);
-  });
-  this.socket.on('pared_der_infLocation', function(pared_der_infLocation){
-    if(self.parDerinf) self.parDerinf.destroy();
-    self.parDerinf = self.physics.add.image(pared_der_infLocation.x, pared_der_infLocation.y, 'parDerinf');
-    self.physics.add.collider(self.carro, self.parDerinf, function(){
-      self.carro.setVelocity(0);
-      self.parDerinf.setVelocity(0);
-    }, null, self);
-  });
-  this.socket.on('pared_izqLocation', function(pared_izqLocation){
-    if(self.parIzq) self.parIzq.destroy();
-    self.parIzq = self.physics.add.image(pared_izqLocation.x, pared_izqLocation.y, 'parIzq');
-    self.physics.add.collider(self.carro, self.parIzq, function(){
-      self.carro.setVelocity(0);
-      self.parIzq.setVelocity(0);
-    }, null, self);
-  });
-  this.socket.on('piso_derLocation', function(piso_derLocation){
-    if(self.pisDer) self.pisDer.destroy();
-    self.pisDer = self.physics.add.image(piso_derLocation.x, piso_derLocation.y, 'pisDer');
-    self.physics.add.collider(self.carro, self.pisDer, function(){
-      self.carro.setVelocity(0);
-      self.pisDer.setVelocity(0);
-    }, null, self);
-  });
-  this.socket.on('techoLocation', function(techoLocation){
-    if(self.techo) self.techo.destroy();
-    self.techo = self.physics.add.image(techoLocation.x, techoLocation.y, 'techo');
-    self.physics.add.collider(self.carro, self.techo, function(){
-      self.carro.setVelocity(0);
-      self.techo.setVelocity(0);
-    }, null, self);
-  });
-  this.vuelta=false;
+ 
 
   //Declarar un ganador y reinicio de juego
   this.socket.on('soy ganador', data=>{
