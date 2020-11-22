@@ -32,7 +32,6 @@ function preload() {
   this.load.image('one', 'assets/cars/Ambulance.png');
   this.load.image('two', 'assets/cars/Black_viper.png');
   this.load.image('three', 'assets/cars/Car.png');
-  this.load.image('four', 'assets/cars/Mini_truck.png');
   this.load.image('five', 'assets/cars/Mini_van.png');
   this.load.image('six', 'assets/cars/Police.png');
   
