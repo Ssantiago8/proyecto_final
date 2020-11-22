@@ -28,7 +28,7 @@ var ready = false;
 function preload() {
 
   //Carga de vehiculos
-  this.load.image('carro', 'assets/cars/Audi.png');
+  this.load.image('carro', 'assets/cars/trineo.png');
   this.load.image('policia', 'assets/cars/Police.png');
   
 
@@ -141,7 +141,7 @@ function create() {
 
 //Creacion de vehiculo y jugador
 function addPlayer(self, playerInfo) {
-  self.carro = self.physics.add.image(playerInfo.x, playerInfo.y, 'carro').setOrigin(0.5, 0.5).setDisplaySize(20, 35).setOffset(8, 12)     
+  self.carro = self.physics.add.image(playerInfo.x, playerInfo.y, 'carro').setOrigin(0.5, 0.5).setDisplaySize(30, 45).setOffset(8, 12)     
   .setOffset(8, 12)     
   self.carro.setDrag(250);
   self.carro.setAngularDrag(250);
