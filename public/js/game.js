@@ -43,20 +43,7 @@ function preload() {
   this.load.image('tiles','assets/mapa/tileSets.png');
 
   //Carga de los bordes del mapa
-  this.load.image('star','assets/mapa/bord_inf.png');
-  this.load.image('cajaDer','assets/mapa/caja_der.png');
-  this.load.image('cajaInt','assets/mapa/caja_int.png');
-  this.load.image('cajaIntInf','assets/mapa/caja_intinf.png');
-  this.load.image('divMed','assets/mapa/div_medio.png');
-  this.load.image('obstDer','assets/mapa/obstaculo_der.png');
-  this.load.image('obstTec','assets/mapa/obstaculo_techo.png');
-  this.load.image('parDersup','assets/mapa/pared_der_sup.png');
-  this.load.image('parDerinf','assets/mapa/pared_der_inf.png');
-  this.load.image('parIzq','assets/mapa/pared_izq.png');
-  this.load.image('pisDer','assets/mapa/piso_der.png');
-  this.load.image('techo','assets/mapa/techo.png');
-  this.load.image('llegada','assets/mapa/llegada.png');
-  this.load.image('checkpoint','assets/mapa/checkpoint.png');
+  
 }
 
 function create() { 
