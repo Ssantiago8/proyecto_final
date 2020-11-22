@@ -34,18 +34,21 @@ function preload() {
 
  
   //Carga del mapa
-  
-
   this.load.image('fondoHielo','assets/mapa/fondoHielo.png');
-  
-  
+  this.load.tilemapTiledJSON('mapa','assets/mapa/mapa.json')
+  this.load.image('tiles','assets/mapa/terrain_atlas.png')
+  this.load.image('fn','assets/mapa/fondoHielo.png')
 }
 
 function create() { 
-
-
+  this.add.image(400, 300, 'fondoHielo'); 
+  mapa = this.make.tilemap({ key : 'mapa'})
+  var tilesets = mapa.addTilesetImage('terrain_atlas','tiles' );
+  var solidos = mapa.createDynamicLayer('solidos',tilesets,0,0);
+  var fondo = mapa.addTilesetImage('fondoHielo','fn');
+  var f1 = mapa.createDynamicLayer('f1', fondo,0,0); 
   //Creacion del mapa
-  this.add.image(400, 300, 'fondoHielo');
+ 
 
   //Declaracion de socket y otros jugadores
   var self = this;
