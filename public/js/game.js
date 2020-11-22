@@ -39,10 +39,10 @@ function preload() {
 
  
   //Carga del mapa
-  this.load.tilemapTiledJSON('mapa', 'assets/mapa/Mapa.json');
-  this.load.image('tiles','assets/mapa/fondo.jpg');
+  
 
-  //Carga de los bordes del mapa
+  this.load.image('fondo','assets/mapa/fondo.jpg');
+  
   
 }
 
@@ -50,14 +50,8 @@ function create() {
 
 
   //Creacion del mapa
-  mapa = this.make.tilemap({ key: 'mapa' });
-  var tilesets = mapa.addTilesetImage('tileSets', 'tiles');
-  var solidos = mapa.createDynamicLayer('solidos', tilesets, 0, 0);
-  solidos.setCollisionByProperty({ solido: true });
-
-
-
-
+  this.add.image(400, 300, 'fondo');
+  
   //Declaracion de socket y otros jugadores
   var self = this;
   this.socket = io();
