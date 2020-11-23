@@ -1,8 +1,8 @@
 var config = {
   type: Phaser.AUTO,
   parent: 'phaser-example',
-  width: 950,
-  height: 642,
+  width: 1335,
+  height: 682,
   physics: {
     default: 'arcade',
     arcade: {
@@ -41,13 +41,16 @@ function preload() {
 }
 
 function create() { 
-  this.add.image(400, 300, 'fondoHielo'); 
+  //Creacion del mapa
+  this.add.image(655, 341, 'fondoHielo'); 
   mapa = this.make.tilemap({ key : 'mapa'})
   var tilesets = mapa.addTilesetImage('terrain_atlas','tiles' );
   var solidos = mapa.createDynamicLayer('solidos',tilesets,0,0);
-  var fondo = mapa.addTilesetImage('fondoHielo','fn');
-  var f1 = mapa.createDynamicLayer('f1', fondo,0,0); 
-  //Creacion del mapa
+  //solidos.setCollisionByProperty({ solido : true});
+  
+  
+  
+
  
 
   //Declaracion de socket y otros jugadores
@@ -160,7 +163,7 @@ function addOtherPlayers(self, playerInfo) {
       otherPlayer.playerId = playerInfo.playerId;
       self.otherPlayers.add(otherPlayer);
    
-  
+ 
 }
 
 function update() {

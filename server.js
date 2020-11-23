@@ -108,21 +108,7 @@ io.on('connection', function (socket) {
     socket.emit('otroGana')
   });
 
-  //Manda los objetos de mapa al nuevo jugador.
-  socket.emit('starLocation', star);
-  socket.emit('caja_derLocation', caja_der);
-  socket.emit('caja_intLocation', caja_int);
-  socket.emit('caja_intinfLocation', caja_intinf);
-  socket.emit('div_medioLocation', div_medio);
-  socket.emit('obstaculo_derLocation', obstaculo_der);
-  socket.emit('obstaculo_techoLocation', obstaculo_techo);
-  socket.emit('pared_der_supLocation', pared_der_sup);
-  socket.emit('pared_der_infLocation', pared_der_inf);
-  socket.emit('pared_izqLocation', pared_izq);
-  socket.emit('piso_derLocation', piso_der);
-  socket.emit('techoLocation', techo);
-  socket.emit('llegada_location', llegada);
-  socket.emit('checkpoint_location',checkpoint);
+ 
 
   // manda los puntajes actuales
   socket.emit('scoreUpdate', scores);
