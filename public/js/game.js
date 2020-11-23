@@ -29,29 +29,32 @@ function preload() {
 
   //Carga de vehiculos
   this.load.image('carro', 'assets/cars/trineo.png');
+
   this.load.image('policia', 'assets/cars/Police.png');
-  
+
 
  
   //Carga del mapa
-  this.load.image('fondoHielo','assets/mapa/fondoHielo.png');
+ 
+  this.load.image('fondo','assets/mapa/fondoHielo.png');
   this.load.tilemapTiledJSON('mapa','assets/mapa/mapa.json')
   this.load.image('tiles','assets/mapa/terrain_atlas.png')
   this.load.image('fn','assets/mapa/fondoHielo.png')
+
 }
 
 function create() { 
+
+
   //Creacion del mapa
-  this.add.image(655, 341, 'fondoHielo'); 
+  
+  this.add.image(655, 341, 'fondo');
   mapa = this.make.tilemap({ key : 'mapa'})
   var tilesets = mapa.addTilesetImage('terrain_atlas','tiles' );
   var solidos = mapa.createDynamicLayer('solidos',tilesets,0,0);
-  //solidos.setCollisionByProperty({ solido : true});
-  
-  
-  
 
- 
+
+
 
   //Declaracion de socket y otros jugadores
   var self = this;
@@ -107,37 +110,16 @@ function create() {
   this.cursors = this.input.keyboard.createCursorKeys();
 
 
+
+
+ 
 //Colisiones entre jugador y mapa
  
   this.socket.on('checkpoint_location', function(checkpoint_location){
     if(self.checkpoint) self.checkpoint.destroy();
     self.checkpoint = self.physics;
   });
- 
-
-  //Declarar un ganador y reinicio de juego
-  /*this.socket.on('soy ganador', data=>{
-    alert('El ganador fue el jugador '+data)
-    score=0;
-    scoreText.setText('Vueltas: ' + 0);
-    this.maxScoreText.setText('Mayor vueltas: ' + 0)
-    self.carro.x=70;
-    self.carro.y=90;
-    self.carro.setVelocity(0);
-    self.carro.setAngularVelocity(0);
-    self.carro.setAcceleration(0);
-    self.otherPlayers.x=70;
-    self.otherPlayers.y=90;
-    this.socket.emit('nuevoMax');
-  });
-
-  this.socket.on('otroGana', function(){
-    self.carro.x = 70;
-    self.carro.y= 90;
-    score = 0;
-    console.log("otro gana")
-  })
-*/
+  
   
 
 }
@@ -158,19 +140,20 @@ function addPlayer(self, playerInfo) {
 function addOtherPlayers(self, playerInfo) {
   
   var otherPlayer;
-  
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'policia').setOrigin(0.5, 0.5).setDisplaySize(53, 40);
+ 
+      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'policia').setOrigin(0.5, 0.5).setDisplaySize(58, 45);
       otherPlayer.playerId = playerInfo.playerId;
       self.otherPlayers.add(otherPlayer);
-   
- 
+    
+  
+  
 }
 
 function update() {
   
   if(this.ready){
-    //Pasa a ser else si ya se completaron las 3 vueltas.
-    if (score!=3){
+    
+    
       //Movimiento del carro
     if (this.carro) {
       if (this.cursors.left.isDown) {
@@ -185,23 +168,8 @@ function update() {
       } else {
         this.carro.setAcceleration(0);
       }
-      this.physics.world.wrap(this.carro, 5);
-       this.physics.add.overlap(this.carro,this.checkpoint,function(){ 
-         this.vuelta=true
-         this.checkpoint.destroy()
-         this.llegada = this.physics.add.image(this.llegada.x=158, this.llegada.y=80, 'llegada');
-       },null,this);
       
-       // Aumenta el puntaje del jugador y lo compara con el maximo
-      if(this.vuelta){
-        this.physics.add.overlap(this.carro,this.llegada,function(){ 
-          this.llegada.destroy()
-          score += 1;
-          this.socket.emit('vueltaHecha',score);
-          scoreText.setText('Vueltas: ' + score);
-          this.checkpoint=this.physics.add.image(this.checkpoint.x=449, this.checkpoint.y=400, 'checkpoint');
-        },null,this);
-      }
+     
       // emite el movimiento del jugador
       var x = this.carro.x;
       var y = this.carro.y;
@@ -216,12 +184,7 @@ function update() {
         rotation: this.carro.rotation
       };
     } 
-   }else{
-     //Anuncia un ganador
-     this.socket.emit('ganador', this.socket.id);
-     this.carro.setVelocity(0);
-     this.carro.setAngularVelocity(0);
-   }
+   
   
   }else{
     //mensaje en casp de que no hayan dos jugadores conectados
