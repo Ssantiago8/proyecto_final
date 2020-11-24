@@ -37,7 +37,7 @@ function preload() {
 
   this.load.image('fondo', 'assets/mapa/fondoHielo.png');
   this.load.tilemapTiledJSON('mapa', 'assets/mapa/mapa.json')
-  this.load.image('tiles', 'assets/mapa/terrain_atlas.png')
+//  this.load.image('tiles', 'assets/mapa/terrain_atlas.png')
   this.load.image('fn', 'assets/mapa/fondoHielo.png')
 
 }
@@ -49,8 +49,9 @@ function create() {
 
   this.add.image(655, 341, 'fondo');
   mapa = this.make.tilemap({ key: 'mapa' })
-  var tilesets = mapa.addTilesetImage('terrain_atlas', 'tiles');
-  var solidos = mapa.createDynamicLayer('solidos', tilesets, 0, 0);
+ // var tilesets = mapa.addTilesetImage('terrain_atlas', 'tiles');
+ // var solidos = mapa.createDynamicLayer('solidos', tilesets, 0, 0);
+  
 
 
 
@@ -61,6 +62,7 @@ function create() {
   var tipoCarro;
   var sizeX;
   var sizeY;
+  var cafe = 0;
 
   //Actualizar objeto Jugadores
   this.socket.on('currentPlayers', function (players) {
@@ -83,23 +85,6 @@ function create() {
     });
   });
 
-  //Colisiones entre policias
-
-
-  this.socket.on('collisionBetweenPlayers', function (players) {
-
-    Object.keys(players).forEach(function (id) {
-      player1 = players[id];
-      Object.keys(players).forEach(function (id) {
-
-        if (player1 !== players[id]) {
-          player2 = players[id];
-          this.physics.add.collider(player1, player2, this.desaparecer, null, this);
-        }
-      });
-    });
-
-  });
 
 
 
@@ -119,6 +104,14 @@ function create() {
   this.socket.on('newPlayer', function (playerInfo) {
     addOtherPlayers(self, playerInfo);
 
+  });
+
+  //Pregunta si el Jugador desconectado es el Ladron
+  
+  this.socket.on('¿SoyLadron?', function (playerInfo){
+    if(playerInfo.isLadron){
+      this.socket.emit('Si', true);
+    }
   });
 
   //Jugador desconectado
@@ -154,11 +147,24 @@ function create() {
 
 
 
+  //Colisiones entre policias
+  this.socket.on('collisionBetweenPlayers', function (players) {
 
-}
+    Object.keys(players).forEach(function (id) {
+      player2 = players[id];
+      console.log('jugador 2:', player2.playerId);
+      if (cafe === 0) {
+          player1 = players[id];
+          console.log('jugador 1:', player1.playerId);
+          cafe++;
+        }else{
+        self.physics.add.collider(player1, player2, function(player1, player2){
+          console.log('YA PUEDES PONER QUE SE DESTRUYAN');
+        });
+        }
+    });
 
-function desaparecer() {
-  console.log('stupid si entras y entonce');
+  });
 }
 //Creacion de vehiculo y jugador
 function addPlayer(self, playerInfo, tipoCarro, sizeX, sizeY) {
@@ -195,6 +201,8 @@ function addOtherPlayers(self, playerInfo) {
 
 function update() {
 
+  
+
   if (this.ready) {
     //Movimiento del carro
     if (this.carro) {
@@ -225,7 +233,8 @@ function update() {
       };
     }
 
-
+    
+   
   } else {
     //mensaje en casp de que no hayan dos jugadores conectados
     alert('Se necesitan dos jugadores para empezar')

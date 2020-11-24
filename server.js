@@ -5,8 +5,10 @@ var io = require('socket.io').listen(server);
 var conectados = 0;
 var i = 0;
 var ladron;
-var coorX = 75;
+var coorX = 150;
 var coorY = 90 + Math.floor(Math.random() * 40);
+var desconectados = 0;
+var confirmacion;
 
 //Objeto jugadores
 var players = {};
@@ -35,7 +37,7 @@ io.on('connection', function (socket) {
   } else {
     ladron = false;
     coorX = coorX + 80;
-    coorY = coorY + 50;
+    coorY = coorY;
   }
 
   //Crea un nuevo jugador y lo añade al objeto de jugadores
@@ -51,7 +53,7 @@ io.on('connection', function (socket) {
   };
   // Actualiza los jugadores 
   socket.emit('currentPlayers', players);
- // socket.emit('collisionBetweenPlayers', players);
+  
 
   /*Manda el ganador a todos los jugadores.
   socket.on('ganador', data => {
@@ -69,12 +71,20 @@ io.on('connection', function (socket) {
 
   // Cuando se desconecta un jugador se remueve del objeto jugadores
   socket.on('disconnect', function () {
+    desconectados++;
     console.log('user disconnected: ', socket.id);
     delete players[socket.id];
     //manda un mensaje de jugador desconectado
     io.emit('disconnect', socket.id);
-    
-    
+  /*  io.emit('¿SoyLadron?', players[socket.id]);
+    socket.on('Si', confirmacion) ;
+    console.log('confirmacion estado:');
+    if(confirmacion){
+      i = 0;
+    }*/
+    if(desconectados === conectados){
+      i = 0;
+    }
   });
 
   // cuando se mueve un jugador se acualiza su informacion de posicion.
@@ -82,8 +92,10 @@ io.on('connection', function (socket) {
     players[socket.id].x = movementData.x;
     players[socket.id].y = movementData.y;
     players[socket.id].rotation = movementData.rotation;
+    
     // emite el movimiento del jugador a todos los jugadores
     socket.broadcast.emit('playerMoved', players[socket.id]);
+    socket.emit('collisionBetweenPlayers', players);
   });
 
 
@@ -95,8 +107,6 @@ io.on('connection', function (socket) {
   });
 
 });
-
-
 
 server.listen(8081, function () {
   console.log(`Listening on ${server.address().port}`);
