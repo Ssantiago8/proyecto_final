@@ -53,22 +53,26 @@ function create() {
   var tilesets = mapa.addTilesetImage('terrain_atlas','tiles' );
   var solidos = mapa.createDynamicLayer('solidos',tilesets,0,0);
 
-
+//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 
   //Declaracion de socket y otros jugadores
   var self = this;
   this.socket = io();
   this.otherPlayers = this.physics.add.group();
+  var tipoCarro;
 
   //Actualizar objeto Jugadores
   this.socket.on('currentPlayers', function (players) {
     Object.keys(players).forEach(function (id) {
       if (players[id].playerId === self.socket.id) {
-        addPlayer(self, players[id]);
-      } else {
-        addOtherPlayers(self, players[id]);
-      }
+        if(players[id].isLadron){
+          addPlayer(self, players[id], 'carro');
+        }else{
+          addPlayer(self, players[id], 'policia');
+        }
+        
+      } 
     });
   });
   this.socket.on('conectados',valor =>{
@@ -125,14 +129,16 @@ function create() {
 }
 
 //Creacion de vehiculo y jugador
-function addPlayer(self, playerInfo) {
-  self.carro = self.physics.add.image(playerInfo.x, playerInfo.y, 'carro').setOrigin(0.5, 0.5).setDisplaySize(30, 45).setOffset(8, 12)     
+function addPlayer(self, playerInfo, tipoCarro) {
+
+
+  self.carro = self.physics.add.image(playerInfo.x, playerInfo.y, tipoCarro).setOrigin(0.5, 0.5).setDisplaySize(30, 45).setOffset(8, 12)     
   .setOffset(8, 12)     
   self.carro.setDrag(250);
   self.carro.setAngularDrag(250);
   self.carro.setMaxVelocity(200);
   self.carro.setCollideWorldBounds(true);
-  self.carro.score = 0;
+ 
   
 }
 
@@ -141,7 +147,7 @@ function addOtherPlayers(self, playerInfo) {
   
   var otherPlayer;
  
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'policia').setOrigin(0.5, 0.5).setDisplaySize(58, 45);
+      otherPlayer =  self.physics.add.image(playerInfo.x, playerInfo.y, 'policia').setOrigin(0.5, 0.5).setDisplaySize(58, 45);
       otherPlayer.playerId = playerInfo.playerId;
       self.otherPlayers.add(otherPlayer);
     
