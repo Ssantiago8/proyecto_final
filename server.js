@@ -94,8 +94,9 @@ io.on('connection', function (socket) {
     players[socket.id].rotation = movementData.rotation;
     
     // emite el movimiento del jugador a todos los jugadores
+    socket.emit('collisionBetweenPlayers', players[socket.id]);
     socket.broadcast.emit('playerMoved', players[socket.id]);
-    socket.emit('collisionBetweenPlayers', players);
+    
   });
 
 

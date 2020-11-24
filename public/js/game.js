@@ -51,7 +51,7 @@ function create() {
   mapa = this.make.tilemap({ key: 'mapa' })
   var tilesets = mapa.addTilesetImage('terrain_atlas', 'tiles');
   var solidos = mapa.createDynamicLayer('solidos', tilesets, 0, 0);
-  
+
 
 
 
@@ -76,10 +76,10 @@ function create() {
           sizeX = 58;
           sizeY = 45;
           addPlayer(self, players[id], 'policia', sizeX, sizeY);
-          
+
         }
 
-      }else{
+      } else {
         addOtherPlayers(self, players[id]);
       }
     });
@@ -107,9 +107,9 @@ function create() {
   });
 
   //Pregunta si el Jugador desconectado es el Ladron
-  
-  this.socket.on('¿SoyLadron?', function (playerInfo){
-    if(playerInfo.isLadron){
+
+  this.socket.on('¿SoyLadron?', function (playerInfo) {
+    if (playerInfo.isLadron) {
       this.socket.emit('Si', true);
     }
   });
@@ -148,27 +148,23 @@ function create() {
 
 
   //Colisiones entre policias
-  this.socket.on('collisionBetweenPlayers', function (players) {
+  this.socket.on('collisionBetweenPlayers', function (playerInfo) {
 
-    Object.keys(players).forEach(function (id) {
-      player2 = players[id];
-      console.log('jugador 2:', player2.playerId);
-      if (cafe === 0) {
-          player1 = players[id];
-          console.log('jugador 1:', player1.playerId);
-          cafe++;
-        }else{
-        self.physics.add.overlap(player1, player2, destruir, null, this); 
-        }
-    });
+    
+        self.physics.add.collider(self.carro, self.otherPlayers, function(){
+          
+          //aqui puedes poner lo que quieres que hagan los carros cuando choques, el self.carro es el jugador local 
+         // por ejemplo yo lo puse chiquitin self.carro.setDisplaySize(5,5);
+         
+         
+        });
+  
 
   });
 
 }
 
-function destruir(player1, player2){
-  console.log('entraaaaa aquiiiii');
-}
+
 //Creacion de vehiculo y jugador
 function addPlayer(self, playerInfo, tipoCarro, sizeX, sizeY) {
 
@@ -179,7 +175,7 @@ function addPlayer(self, playerInfo, tipoCarro, sizeX, sizeY) {
   self.carro.setAngularDrag(250);
   self.carro.setMaxVelocity(200);
   self.carro.setCollideWorldBounds(true);
-
+  self.physics.add.collider(self.carro, self.otherPlayers);
 
 }
 
@@ -187,24 +183,24 @@ function addPlayer(self, playerInfo, tipoCarro, sizeX, sizeY) {
 function addOtherPlayers(self, playerInfo) {
 
   var otherPlayer;
-  
-  
-    if (playerInfo.isLadron) {
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'carro').setOrigin(0.5, 0.5).setDisplaySize(30, 45);
 
-    } else {
-      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'policia').setOrigin(0.5, 0.5).setDisplaySize(58, 45);
 
-    }
+  if (playerInfo.isLadron) {
+    otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'carro').setOrigin(0.5, 0.5).setDisplaySize(30, 45);
 
-    otherPlayer.playerId = playerInfo.playerId;
+  } else {
+    otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'policia').setOrigin(0.5, 0.5).setDisplaySize(58, 45);
+
+  }
+
+  otherPlayer.playerId = playerInfo.playerId;
   self.otherPlayers.add(otherPlayer);
 
 }
 
 function update() {
 
-  
+
 
   if (this.ready) {
     //Movimiento del carro
@@ -236,8 +232,8 @@ function update() {
       };
     }
 
-    
-   
+
+
   } else {
     //mensaje en casp de que no hayan dos jugadores conectados
     alert('Se necesitan dos jugadores para empezar')
