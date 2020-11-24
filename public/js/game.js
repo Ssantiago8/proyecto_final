@@ -14,16 +14,15 @@ var config = {
     preload: preload,
     create: create,
     update: update
-  } 
+  }
 };
 
 var game = new Phaser.Game(config);
 var mapa;
-var score=0;
-var scoreText;
-var conectados=0;
+var conectados = 0;
 var ready = false;
-
+var player1;
+var player2;
 
 function preload() {
 
@@ -33,24 +32,32 @@ function preload() {
   this.load.image('policia', 'assets/cars/Police.png');
 
 
- 
+
   //Carga del mapa
- 
-  this.load.image('fondo','assets/mapa/fondoHielo.png');
-  this.load.tilemapTiledJSON('mapa','assets/mapa/mapa.json')
-  this.load.image('tiles','assets/mapa/terrain_atlas.png')
-  this.load.image('fn','assets/mapa/fondoHielo.png')
+
+  this.load.image('fondo', 'assets/mapa/fondoHielo.png');
+  this.load.tilemapTiledJSON('mapa', 'assets/mapa/mapa.json')
+  this.load.image('tiles', 'assets/mapa/terrain_atlas.png')
+  this.load.image('fn', 'assets/mapa/fondoHielo.png')
 
 }
 
-function create() { 
+function create() {
 
 
   //Creacion del mapa
+<<<<<<< HEAD
   
   this.add.image(655, 341, 'fondo');
   mapa = this.make.tilemap({ key : 'mapa'});
   
+=======
+
+  this.add.image(655, 341, 'fondo');
+  mapa = this.make.tilemap({ key: 'mapa' })
+  var tilesets = mapa.addTilesetImage('terrain_atlas', 'tiles');
+  var solidos = mapa.createDynamicLayer('solidos', tilesets, 0, 0);
+>>>>>>> 50ad00ca1bf65d77ab05bd5143df93b42ee2716d
 
 
 
@@ -58,35 +65,69 @@ function create() {
   var self = this;
   this.socket = io();
   this.otherPlayers = this.physics.add.group();
+  var tipoCarro;
+  var sizeX;
+  var sizeY;
 
   //Actualizar objeto Jugadores
   this.socket.on('currentPlayers', function (players) {
     Object.keys(players).forEach(function (id) {
       if (players[id].playerId === self.socket.id) {
-        addPlayer(self, players[id]);
-      } else {
+        if (players[id].isLadron) {
+          sizeX = 30;
+          sizeY = 45;
+          addPlayer(self, players[id], 'carro', sizeX, sizeY);
+        } else {
+          sizeX = 58;
+          sizeY = 45;
+          addPlayer(self, players[id], 'policia', sizeX, sizeY);
+          
+        }
+
+      }else{
         addOtherPlayers(self, players[id]);
       }
     });
   });
-  this.socket.on('conectados',valor =>{
-    if(valor>=2){
-      this.ready=true;
+
+  //Colisiones entre policias
+
+
+  this.socket.on('collisionBetweenPlayers', function (players) {
+
+    Object.keys(players).forEach(function (id) {
+      player1 = players[id];
+      Object.keys(players).forEach(function (id) {
+
+        if (player1 !== players[id]) {
+          player2 = players[id];
+          this.physics.add.collider(player1, player2, this.desaparecer, null, this);
+        }
+      });
+    });
+
+  });
+
+
+
+  this.socket.on('conectados', valor => {
+    if (valor >= 2) {
+      this.ready = true;
       this.socket.emit('listos');
     }
   })
 
-  this.socket.on('bro', ()=>{
-    this.ready=true;
+  this.socket.on('bro', () => {
+    this.ready = true;
   });
-  
+
 
   
 
   //Jugador añadido
   this.socket.on('newPlayer', function (playerInfo) {
     addOtherPlayers(self, playerInfo);
-    
+
   });
 
   //Jugador desconectado
@@ -112,13 +153,14 @@ function create() {
 
 
 
- 
-//Colisiones entre jugador y mapa
- 
-  this.socket.on('checkpoint_location', function(checkpoint_location){
-    if(self.checkpoint) self.checkpoint.destroy();
+
+  //Colisiones entre jugador y mapa
+
+  this.socket.on('checkpoint_location', function (checkpoint_location) {
+    if (self.checkpoint) self.checkpoint.destroy();
     self.checkpoint = self.physics;
   });
+<<<<<<< HEAD
   
   this.socket.on('borde', function(borde){
     if(self.borde) self.borde.destroy();
@@ -130,42 +172,62 @@ function create() {
   });
   
   
+=======
+
+
+
+
+>>>>>>> 50ad00ca1bf65d77ab05bd5143df93b42ee2716d
 }
 
+function desaparecer() {
+  console.log('stupid si entras y entonce');
+}
 //Creacion de vehiculo y jugador
-function addPlayer(self, playerInfo) {
-  self.carro = self.physics.add.image(playerInfo.x, playerInfo.y, 'carro').setOrigin(0.5, 0.5).setDisplaySize(30, 45).setOffset(8, 12)     
-  .setOffset(8, 12)     
+function addPlayer(self, playerInfo, tipoCarro, sizeX, sizeY) {
+
+
+  self.carro = self.physics.add.image(playerInfo.x, playerInfo.y, tipoCarro).setOrigin(0.5, 0.5).setDisplaySize(sizeX, sizeY).setOffset(8, 12)
+    .setOffset(8, 12)
   self.carro.setDrag(250);
   self.carro.setAngularDrag(250);
   self.carro.setMaxVelocity(200);
   self.carro.setCollideWorldBounds(true);
+<<<<<<< HEAD
   self.carro.score = 50;
   var tilesets = mapa.addTilesetImage('terrain_atlas','tiles' );
   var solidos = mapa.createDynamicLayer('solidos',tilesets,0,0);
   solidos.setCollisionByProperty({ solido : true});
   self.physics.add.collider(self.carro, solidos);
+=======
+
+
+>>>>>>> 50ad00ca1bf65d77ab05bd5143df93b42ee2716d
 }
 
 //Creacion de los autos de los demas jugadores en el servidor
 function addOtherPlayers(self, playerInfo) {
-  
+
   var otherPlayer;
- 
+  
+  
+    if (playerInfo.isLadron) {
+      otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'carro').setOrigin(0.5, 0.5).setDisplaySize(30, 45);
+
+    } else {
       otherPlayer = self.add.sprite(playerInfo.x, playerInfo.y, 'policia').setOrigin(0.5, 0.5).setDisplaySize(58, 45);
-      otherPlayer.playerId = playerInfo.playerId;
-      self.otherPlayers.add(otherPlayer);
-    
-  
-  
+
+    }
+
+    otherPlayer.playerId = playerInfo.playerId;
+  self.otherPlayers.add(otherPlayer);
+
 }
 
 function update() {
-  
-  if(this.ready){
-    
-    
-      //Movimiento del carro
+
+  if (this.ready) {
+    //Movimiento del carro
     if (this.carro) {
       if (this.cursors.left.isDown) {
         this.carro.setAngularVelocity(-150);
@@ -179,8 +241,6 @@ function update() {
       } else {
         this.carro.setAcceleration(0);
       }
-      
-     
       // emite el movimiento del jugador
       var x = this.carro.x;
       var y = this.carro.y;
@@ -194,13 +254,13 @@ function update() {
         y: this.carro.y,
         rotation: this.carro.rotation
       };
-    } 
-   
-  
-  }else{
+    }
+
+
+  } else {
     //mensaje en casp de que no hayan dos jugadores conectados
     alert('Se necesitan dos jugadores para empezar')
   }
-  
-  
+
+
 }
