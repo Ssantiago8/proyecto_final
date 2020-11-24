@@ -49,10 +49,8 @@ function create() {
   //Creacion del mapa
   
   this.add.image(655, 341, 'fondo');
-  mapa = this.make.tilemap({ key : 'mapa'})
-  var tilesets = mapa.addTilesetImage('terrain_atlas','tiles' );
-  var solidos = mapa.createDynamicLayer('solidos',tilesets,0,0);
-
+  mapa = this.make.tilemap({ key : 'mapa'});
+  
 
 
 
@@ -81,6 +79,8 @@ function create() {
   this.socket.on('bro', ()=>{
     this.ready=true;
   });
+  
+
   
 
   //Jugador añadido
@@ -120,8 +120,16 @@ function create() {
     self.checkpoint = self.physics;
   });
   
+  this.socket.on('borde', function(borde){
+    if(self.borde) self.borde.destroy();
+    self.obstDer = self.physics.add.image(borde.x, borde.y, 'border');
+    self.physics.add.collider(self.carro, self.borde, function(){
+      self.carro.setVelocity(0);
+      self.borde.setVelocity(0);
+    }, null, self);
+  });
   
-
+  
 }
 
 //Creacion de vehiculo y jugador
@@ -132,8 +140,11 @@ function addPlayer(self, playerInfo) {
   self.carro.setAngularDrag(250);
   self.carro.setMaxVelocity(200);
   self.carro.setCollideWorldBounds(true);
-  self.carro.score = 0;
-  
+  self.carro.score = 50;
+  var tilesets = mapa.addTilesetImage('terrain_atlas','tiles' );
+  var solidos = mapa.createDynamicLayer('solidos',tilesets,0,0);
+  solidos.setCollisionByProperty({ solido : true});
+  self.physics.add.collider(self.carro, solidos);
 }
 
 //Creacion de los autos de los demas jugadores en el servidor
