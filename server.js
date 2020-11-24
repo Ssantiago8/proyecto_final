@@ -9,74 +9,7 @@ var ladron;
 //Objeto jugadores
 var players = {};
 
-//posiciones colliders mapa
-var star = {
-  x: 320,
-  y: 623
-};
-var caja_der = {
-  x: 559,
-  y: 192
-};
-var caja_int = {
-  x: 225,
-  y: 306
-};
-var caja_intinf = {
-  x: 323,
-  y: 480
-};
-var div_medio = {
-  x: 402,
-  y: 224
-};
-var obstaculo_der = {
-  x: 563,
-  y: 352
-};
-var obstaculo_techo = {
-  x: 384,
-  y: 45
-};
-var pared_der_sup = {
-  x: 753,
-  y: 160
-};
-var pared_der_inf = {
-  x: 624,
-  y: 465
-};
-var pared_izq = {
-  x: 15,
-  y: 314
-};
-var piso_der = {
-  x: 700,
-  y: 336
-};
-var techo = {
-  x: 371,
-  y: 15
-};
 
-
-//Puntaje global 
-var scores = {
-  blue: 0,
-  red: 0,
-  max: 0
-};
-
-
-//Comprobantes de vueltas
-var llegada = {
-  x: 158,
-  y: 80
-};
-var checkpoint = {
-  x: 449,
-  y: 400
-}
 
 app.use(express.static(__dirname + '/public'));
 
@@ -88,8 +21,10 @@ io.on('connection', function (socket) {
   conectados++;
   socket.emit('conectados', conectados);
   socket.on('listos', () => {
-    socket.broadcast.emit('bro');
+  socket.broadcast.emit('bro');
   });
+
+  
   console.log('a user connected: ', socket.id);
   if (i === 0) {
     i++;

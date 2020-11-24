@@ -53,7 +53,6 @@ function create() {
   var tilesets = mapa.addTilesetImage('terrain_atlas','tiles' );
   var solidos = mapa.createDynamicLayer('solidos',tilesets,0,0);
 
-//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 
   //Declaracion de socket y otros jugadores
@@ -75,6 +74,7 @@ function create() {
       } 
     });
   });
+
   this.socket.on('conectados',valor =>{
     if(valor>=2){
       this.ready=true;
@@ -84,7 +84,7 @@ function create() {
 
   this.socket.on('bro', ()=>{
     this.ready=true;
-  });
+  }); 
   
 
   //Jugador añadido
@@ -147,19 +147,16 @@ function addOtherPlayers(self, playerInfo) {
   
   var otherPlayer;
  
-      otherPlayer =  self.physics.add.image(playerInfo.x, playerInfo.y, 'policia').setOrigin(0.5, 0.5).setDisplaySize(58, 45);
-      otherPlayer.playerId = playerInfo.playerId;
-      self.otherPlayers.add(otherPlayer);
+  otherPlayer =  self.physics.add.image(playerInfo.x, playerInfo.y, 'policia').setOrigin(0.5, 0.5).setDisplaySize(58, 45);
+  otherPlayer.playerId = playerInfo.playerId;
+  self.otherPlayers.add(otherPlayer);
     
-  
   
 }
 
 function update() {
   
   if(this.ready){
-    
-    
       //Movimiento del carro
     if (this.carro) {
       if (this.cursors.left.isDown) {
@@ -174,8 +171,6 @@ function update() {
       } else {
         this.carro.setAcceleration(0);
       }
-      
-     
       // emite el movimiento del jugador
       var x = this.carro.x;
       var y = this.carro.y;
