@@ -5,6 +5,8 @@ var io = require('socket.io').listen(server);
 var conectados = 0;
 var i = 0;
 var ladron;
+var coorX = 75;
+var coorY = 90 + Math.floor(Math.random() * 40);
 
 //Objeto jugadores
 var players = {};
@@ -24,20 +26,23 @@ io.on('connection', function (socket) {
   socket.broadcast.emit('bro');
   });
 
-  
+
   console.log('a user connected: ', socket.id);
   if (i === 0) {
     i++;
     ladron = true;
+   
   } else {
     ladron = false;
+    coorX = coorX + 80;
+    coorY = coorY + 50;
   }
 
   //Crea un nuevo jugador y lo añade al objeto de jugadores
   players[socket.id] = {
     rotation: 0,
-    x: 75,
-    y: 90 + Math.floor(Math.random() * 40),
+    x: coorX,
+    y: coorY,
     isLadron: ladron,
     playerId: socket.id,
     
@@ -46,6 +51,7 @@ io.on('connection', function (socket) {
   };
   // Actualiza los jugadores 
   socket.emit('currentPlayers', players);
+ // socket.emit('collisionBetweenPlayers', players);
 
   /*Manda el ganador a todos los jugadores.
   socket.on('ganador', data => {
