@@ -37,7 +37,7 @@ function preload() {
 
   this.load.image('fondo', 'assets/mapa/fondoHielo.png');
   this.load.tilemapTiledJSON('mapa', 'assets/mapa/mapa.json')
-//  this.load.image('tiles', 'assets/mapa/terrain_atlas.png')
+  this.load.image('tiles', 'assets/mapa/terrain_atlas.png')
   this.load.image('fn', 'assets/mapa/fondoHielo.png')
 
 }
@@ -49,8 +49,8 @@ function create() {
 
   this.add.image(655, 341, 'fondo');
   mapa = this.make.tilemap({ key: 'mapa' })
- // var tilesets = mapa.addTilesetImage('terrain_atlas', 'tiles');
- // var solidos = mapa.createDynamicLayer('solidos', tilesets, 0, 0);
+  var tilesets = mapa.addTilesetImage('terrain_atlas', 'tiles');
+  var solidos = mapa.createDynamicLayer('solidos', tilesets, 0, 0);
   
 
 
@@ -158,13 +158,16 @@ function create() {
           console.log('jugador 1:', player1.playerId);
           cafe++;
         }else{
-        self.physics.add.collider(player1, player2, function(player1, player2){
-          console.log('YA PUEDES PONER QUE SE DESTRUYAN');
-        });
+        self.physics.add.overlap(player1, player2, destruir, null, this); 
         }
     });
 
   });
+
+}
+
+function destruir(player1, player2){
+  console.log('entraaaaa aquiiiii');
 }
 //Creacion de vehiculo y jugador
 function addPlayer(self, playerInfo, tipoCarro, sizeX, sizeY) {
