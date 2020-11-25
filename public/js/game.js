@@ -1,3 +1,5 @@
+
+
 var config = {
   type: Phaser.AUTO,
   parent: 'phaser-example',
@@ -11,6 +13,7 @@ var config = {
     }
   },
   scene: {
+    
     preload: preload,
     create: create,
     update: update
@@ -23,15 +26,17 @@ var conectados = 0;
 var ready = false;
 var player1;
 var player2;
+var empezar = false;
 
 function preload() {
 
+
+ 
+
   //Carga de vehiculos
   this.load.image('carro', 'assets/cars/trineo.png');
-
   this.load.image('policia', 'assets/cars/Police.png');
-
-
+  this.load.image('startBoton','assets/mapa/start.png');
 
   //Carga del mapa
 
@@ -51,18 +56,20 @@ function create() {
   mapa = this.make.tilemap({ key: 'mapa' })
   var tilesets = mapa.addTilesetImage('terrain_atlas', 'tiles');
   var solidos = mapa.createDynamicLayer('solidos', tilesets, 0, 0);
+  var botonHenry = this.add.sprite(655, 341, "startBoton").setInteractive();
 
-
-
+  botonHenry.on('pointerup', function (pointer) {
+    this.setTint(0x00ff1a);
+    this.empezar = true;
+  });
 
   //Declaracion de socket y otros jugadores
   var self = this;
   this.socket = io();
   this.otherPlayers = this.physics.add.group();
-  var tipoCarro;
   var sizeX;
   var sizeY;
-  var cafe = 0;
+  
 
   //Actualizar objeto Jugadores
   this.socket.on('currentPlayers', function (players) {
@@ -89,11 +96,13 @@ function create() {
 
 
   this.socket.on('conectados', valor => {
-    if (valor >= 2) {
+
+    if (valor >= 2 ) {
       this.ready = true;
+
       this.socket.emit('listos');
-    }
-  })
+  }
+  });
 
   this.socket.on('bro', () => {
     this.ready = true;
@@ -203,6 +212,7 @@ function update() {
 
 
   if (this.ready) {
+    
     //Movimiento del carro
     if (this.carro) {
       if (this.cursors.left.isDown) {
@@ -230,14 +240,13 @@ function update() {
         y: this.carro.y,
         rotation: this.carro.rotation
       };
-    }
+    
 
 
-
-  } else {
-    //mensaje en casp de que no hayan dos jugadores conectados
-    alert('Se necesitan dos jugadores para empezar')
   }
+  } 
+  
+
 
 
 }
